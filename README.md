@@ -1,11 +1,11 @@
 # Multivariate Closed Skew Normal (MVCSN) Distribution 
-The MVCSN repository provides MATLAB code for calculating the probability density of a *d*-dimensional, Closed Skew Normal Distribution at realization vector $\boldsymbol{x}$ with centralization vector $\boldsymbol{\mu}$, vector $\boldsymbol{v}$, scale matrix $\Sigma$, matrix $\Delta$, and matrix $\Gamma$. The probability density function defined in [1] is:  <br>
+The MVCSN repository provides MATLAB code for calculating the probability density of a *d*-dimensional, Closed Skew Normal Distribution at realization vector $\mathbf{x}$ with centralization vector $\mathbf{\mu}$, vector $\mathbf{v}$, scale matrix $\Sigma$, matrix $\Delta$, and matrix $\Gamma$. The probability density function defined in [1] is:  <br>
 
 $$
 \begin{gather}
-    p(\boldsymbol{x})= \frac{\Phi(\Gamma(\boldsymbol{x}-\boldsymbol{\mu})\,|\,\boldsymbol{v}, \Delta)}{\Phi(\boldsymbol{0}\,|\,\boldsymbol{v}, \Delta + \Gamma\Sigma\Gamma^T)}\,\mathcal{N}(\boldsymbol{x}|\boldsymbol{\mu}, \Sigma),
+    p(\mathbf{x})= \frac{\Phi(\Gamma(\mathbf{x}-\mathbf{\mu})|\mathbf{v}, \Delta)}{\Phi(\mathbf{0}|\mathbf{v}, \Delta + \Gamma\Sigma\Gamma^T)}\mathcal{N}(\mathbf{x}|\mathbf{\mu}, \Sigma),
     \\ 
-    \text{where} \quad \Phi(\boldsymbol{a}\,|\,\boldsymbol{b}, C) = \int_{-\infty}^{\boldsymbol{a}}\mathcal{N}\,(\boldsymbol{x}|\boldsymbol{b}, C)d\boldsymbol{x} \quad \text{and} \quad \mathcal{N}(\boldsymbol{x}\,|\boldsymbol{\mu}, \Sigma) = \frac{1}{\sqrt{(2\pi)^k|\Sigma|}}\exp\Bigg(-\frac{1}{2}(\boldsymbol{x}-\boldsymbol{\mu})^T\Sigma^{-1}(\boldsymbol{x}-\boldsymbol{\mu})\Bigg)
+    \text{where} \quad \Phi(\mathbf{a}|\mathbf{b}, C) = \int_{-\infty}^{\mathbf{a}}\mathcal{N}(\mathbf{x}|\mathbf{b}, C)d\mathbf{x} \quad \text{and} \quad \mathcal{N}(\mathbf{x}|\mathbf{\mu}, \Sigma) = \frac{1}{\sqrt{(2\pi)^k|\Sigma|}}\exp\Bigg(-\frac{1}{2}(\mathbf{x}-\mathbf{\mu})^T\Sigma^{-1}(\mathbf{x}-\mathbf{\mu})\Bigg)
 \end{gather}
 $$
 
