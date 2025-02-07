@@ -48,15 +48,15 @@ function y = mvcsn(X, Mu, V, Sigma, Delta, Gamma)
 % Copyright 2025 by Benjamin L. Hanson, published under BSD 2-Clause License.
 
 if nargin<1
-    error(message('stats:mvcsn:TooFewInputs'));
+    error("TooFewInputs");
 elseif ~ismatrix(X)
-    error(message('stats:mvcsn:InvalidData'));
+    error("InvalidData");
 end
 
 % Get size of data.  Column vectors provisionally interpreted as multiple scalar data.
 [~,d] = size(X);
 if d<1
-    error(message('stats:mvcsn:TooFewDimensions'));
+    error("TooFewDimensions");
 end
 
 % Assume zero mean, data are already centered
@@ -69,10 +69,7 @@ if nargin < 2 || isempty(Mu)
 % Get scalar mean, and use it to center data
 elseif nargin < 3
     X0 = X - Mu;
-    [~, d_V] = size(V);
-    if d~=d_V
-        error(message('stats:mvcsn:BadVDimension'));
-    end
+    V = zeros(1, d); 
     Sigma = eye(d); 
     Delta = zeros(d); 
     Gamma = zeros(d); 
@@ -80,59 +77,70 @@ elseif nargin < 4
     X0 = X - Mu;
     [~, d_V] = size(V);
     if d~=d_V
-        error(message('stats:mvcsn:BadVDimension'));
+        error("BadVDimension");
     end
-    [d1_S, d2_S] = size(Sigma);
-    if d1_S~=d2_S
-        error(message('stats:mvcsn:NotSquareSigma'));
-    elseif d1_S~=d
-        error(message('stats:mvcsn:BadSigmaDimension'));
-    end
+    Sigma = eye(d); 
     Delta = zeros(d); 
     Gamma = zeros(d); 
 elseif nargin < 5
     X0 = X - Mu;
+    [~, d_V] = size(V);
     if d~=d_V
-        error(message('stats:mvcsn:BadVDimension'));
+        error("BadVDimension");
     end
     [d1_S, d2_S] = size(Sigma);
     if d1_S~=d2_S
-        error(message('stats:mvcsn:NotSquareSigma'));
+        error("NotSquareSigma");
     elseif d1_S~=d
-        error(message('stats:mvcsn:BadSigmaDimension'));
+        error("BadSigmaDimension");
     end
-    [d1_D, d2_D] = size(Delta);
-    if d1_D~=d2_D
-        error(message('stats:mvcsn:NotSquareDelta'));
-    elseif d1_D~=d
-        error(message('stats:mvcsn:BadDeltaDimension'));
-    end
+    Delta = zeros(d); 
     Gamma = zeros(d); 
 elseif nargin < 6
     X0 = X - Mu;
+    [~, d_V] = size(V);
     if d~=d_V
-        error(message('stats:mvcsn:BadVDimension'));
+        error("BadVDimension");
     end
     [d1_S, d2_S] = size(Sigma);
     if d1_S~=d2_S
-        error(message('stats:mvcsn:NotSquareSigma'));
+        error("NotSquareSigma");
     elseif d1_S~=d
-        error(message('stats:mvcsn:BadSigmaDimension'));
+        error("BadSigmaDimension");
     end
     [d1_D, d2_D] = size(Delta);
     if d1_D~=d2_D
-        error(message('stats:mvcsn:NotSquareDelta'));
+        error("NotSquareDelta");
     elseif d1_D~=d
-        error(message('stats:mvcsn:BadDeltaDimension'));
+        error("BadDeltaDimension");
+    end
+    Gamma = zeros(d); 
+elseif nargin < 7
+    X0 = X - Mu;
+    [~, d_V] = size(V);
+    if d~=d_V
+        error("BadVDimension");
+    end
+    [d1_S, d2_S] = size(Sigma);
+    if d1_S~=d2_S
+        error("NotSquareSigma");
+    elseif d1_S~=d
+        error("BadSigmaDimension");
+    end
+    [d1_D, d2_D] = size(Delta);
+    if d1_D~=d2_D
+        error("NotSquareDelta");
+    elseif d1_D~=d
+        error("BadDeltaDimension");
     end
     [d1_G, d2_G] = size(Gamma);
     if d1_G~=d2_G
-        error(message('stats:mvcsn:NotSquareGamma'));
+        error("NotSquareGamma");
     elseif d1_G~=d
-        error(message('stats:mvcsn:BadGammaDimension'));
+        error("BadGammaDimension");
     end
 else
-    error(message('stats:mvcsn:BadInputs'));
+    error("BadInputs");
 end
 
 y = (mvncdf(zeros(size(X)), V, Delta + Gamma * Sigma * Gamma')).^-1 ...
