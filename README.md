@@ -3,9 +3,9 @@ The MVCSN repository provides MATLAB code for calculating the probability densit
 
 $$
 \begin{gather}
-    p(\bm{x})&= \frac{\Phi(\Gamma(\bm{x}-\boldsymbol{\mu})\,|\,\bm{v}, \Delta)}{\Phi(\boldsymbol{0}\,|\,\bm{v}, \Delta + \Gamma\Sigma\Gamma^T)}\,\mathcal{N}(\bm{x}\,|\boldsymbol{\mu}, \Sigma),
+    p(\boldsymbol{x})&= \frac{\Phi(\Gamma(\boldsymbol{x}-\boldsymbol{\mu})\,|\,\boldsymbol{v}, \Delta)}{\Phi(\boldsymbol{0}\,|\,\boldsymbol{v}, \Delta + \Gamma\Sigma\Gamma^T)}\,\mathcal{N}(\boldsymbol{x}\,|\boldsymbol{\mu}, \Sigma),
     \\ 
-    \text{where}\Phi(\bm{a}\,|\,\bm{b}, C) = \int_{-\infty}^{\bm{a}}\mathcal{N}\,(\bm{x}\,|\,\bm{b}, C)d\bm{x} \text{  and  } \mathcal{N}(\bm{x}\,|\boldsymbol{\mu}, \Sigma) = \frac{1}{\sqrt{(2\pi)^k|\Sigma|}}\exp\Bigg(-\frac{1}{2}(\bm{x}-\boldsymbol{\mu})^T\Sigma^{-1}(\bm{x}-\boldsymbol{\mu})\Bigg)
+    \text{where}\Phi(\boldsymbol{a}\,|\,\boldsymbol{b}, C) = \int_{-\infty}^{\boldsymbol{a}}\mathcal{N}\,(\boldsymbol{x}\,|\,\boldsymbol{b}, C)d\boldsymbol{x} \text{  and  } \mathcal{N}(\boldsymbol{x}\,|\boldsymbol{\mu}, \Sigma) = \frac{1}{\sqrt{(2\pi)^k|\Sigma|}}\exp\Bigg(-\frac{1}{2}(\boldsymbol{x}-\boldsymbol{\mu})^T\Sigma^{-1}(\boldsymbol{x}-\boldsymbol{\mu})\Bigg)
 \end{gather}
 $$
 
