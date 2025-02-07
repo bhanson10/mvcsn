@@ -33,11 +33,11 @@ function y = mvcsn(X, Mu, V, Sigma, Delta, Gamma)
 %
 %   Example:
 %
-%      Mu = [1 -1]; Sigma = [.9 .4; .4 .3]; Beta = 2.2; 
-%      [X1,X2] = meshgrid(linspace(-2,5,25)', linspace(-3,1,25)');
-%      X = [X1(:) X2(:)];
-%      y = mvggd(X, Mu, Sigma, Beta);
-%      surf(X1,X2,reshape(y,25,25));
+%     Mu = [0 0]; V = [0 0]; Sigma = [2 0; 0 2]; Delta = [3 0; 0 3]; Gamma = [-5 0; 0 -5]; 
+%     [X1,X2] = meshgrid(linspace(-5,1,100)', linspace(-5,1,100)');
+%     X = [X1(:) X2(:)];
+%     y = mvcsn(X, Mu, V, Sigma, Delta, Gamma);
+%     surf(X1,X2,reshape(y,100,100));
 %   
 %   References:
 %      Genton, M.G. (2004). Skew-elliptical distributions and their 
@@ -144,6 +144,6 @@ else
 end
 
 y = (mvncdf(zeros(size(X)), V, Delta + Gamma * Sigma * Gamma')).^-1 ...
-    .* (mvncdf(Gamma * X0, V, Delta))...
-    .* mvnpdf(X0, zeros(d,1), Sigma); 
+    .* mvncdf(pagemtimes(Gamma,'none', X0, 'transpose')', V, Delta)...
+    .* mvnpdf(X0, zeros(1,d), Sigma); 
 end
