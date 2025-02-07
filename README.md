@@ -13,3 +13,5 @@ When $\Gamma = 0$, *mvcsn.m* becomes *mvnpdf.m*. Please direct any questions to 
 
 ## References
 [1] Genton, M.G. (2004). Skew-elliptical distributions and their applications: A journey beyond normality. In G. Gonzalez-Farias J.A. Domínguez-Molina A.K. Gupta, (Eds.), The closed skew-normal distribution. Chapman and Hall/ CRC. 
+
+![csn_2D](https://github.com/user-attachments/assets/737e1b06-ae4e-4dc8-a998-0bc9c1f0ce0c)
