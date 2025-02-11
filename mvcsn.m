@@ -1,42 +1,46 @@
-function y = mvcsn(X, Mu, V, Sigma, Delta, Gamma)
+function y = mvcsn(X, Mu, Sigma, Gamma, Nu, Delta)
 %MVCSN Multivariate Closed Skew Normal (CSN) Distribution 
 %   Y = MVCSN(X) returns the probability density of the multivariate
-%   closed skew normal distribution with zero mean, zero v, identity 
-%   covariance matrix, identity Delta, and zero Gamma, evaluated at each row of 
-%   X.  Rows of the N-by-D matrix X correspond to observations or points, 
-%   and columns correspond to variables or coordinates.  Y is an N-by-1 vector.
+%   closed skew normal distribution with zero mean, identity covariance 
+%   matrix, zero Gamma, zero v, and identity Delta, evaluated at each row of 
+%   X. Rows of the N-by-D matrix X correspond to observations or points, 
+%   and columns correspond to variables or coordinates. Y is an N-by-1 vector.
 %
 %   Y = MVCSN(X,MU) returns the density of the multivariate CSN with 
-%   centralization parameter MU, zero v, identity scale matrix, identity Delta,
-%   and zero Gamma, evaluated at each row of X.  MU is a 1-by-D vector, a 
-%   scalar value, which MVCSN replicates to match the size of X.
+%   centralization parameter MU, identity scale matrix, zero Gamma, 
+%   zero Nu, and identity Delta, evaluated at each row of X. MU is a 1-by-D 
+%   vector or a scalar value, which MVCSN replicates to match the size of X.
 %
-%   Y = MVCSN(X,MU,V) returns the density of the multivariate CSN with 
-%   centralization parameter MU, V, identiy scale matrix, identity Delta, and
-%   zero Gamma, evaluated at each row of X. V is a 1-by-D vector, or a 
-%   scalar value, which MVCSN replicates to match the size of X.
+%   Y = MVCSN(X,MU,SIGMA) returns the density of the multivariate CSN with 
+%   centralization parameter MU, scale matrix SIGMA, zero Gamma, zero Nu, and
+%   identity Delta, evaluated at each row of X. SIGMA is a D-by-D matrix or
+%   a scalar value, which MVCSN multiplies by the identity matrix.
 %
-%   Y = MVCSN(X,MU,V,SIGMA) returns the density of the multivariate CSN with 
-%   centralization parameter MU, V, scale matrix SIGMA, identity Delta, and 
-%   zero Gamma, evaluated at each row of X.  SIGMA is a D-by-D matrix.
+%   Y = MVCSN(X,MU,SIGMA,GAMMA) returns the density of the multivariate CSN 
+%   with centralization parameter MU, scale matrix SIGMA, skew matrix GAMMA, 
+%   zero Nu, and zero Delta, evaluated at each row of X. GAMMA is a D-by-D 
+%   matrix or a scalar value, which MVCSN multiplies by the identity matrix,
+%   that controls the skew of the distribution.
 %
-%   Y = MVCSN(X,MU,V,SIGMA,DELTA) returns the density of the multivariate CSN 
-%   with centralization parameter MU, V, scale matrix SIGMA, DELTA,
-%   and zero Gamma, evaluated at each row of X.  DELTA is a D-by-D matrix.
+%   Y = MVCSN(X,MU,SIGMA,GAMMA,NU) returns the density of the multivariate CSN 
+%   with centralization parameter MU, scale matrix SIGMA, skew matrix GAMMA,
+%   NU, and zero Gamma, evaluated at each row of X. NU is a 1-by-D vector or 
+%   a scalar value, which MVCSN replicates to match the size of X.
 %
-%   Y = MVCSN(X,MU,V,SIGMA,DELTA,GAMMA) returns the density of the 
-%   multivariate CSN with centralization parameter MU, V, scale matrix 
-%   SIGMA, DELTA, and GAMMA, evaluated at each row of X. GAMMA is a D-by-D 
-%   matrix.
+%   Y = MVCSN(X,MU,SIGMA,GAMMA,NU,DELTA) returns the density of the 
+%   multivariate CSN with centralization parameter MU, scale matrix SIGMA, 
+%   skew matrix GAMMA, NU, and DELTA, evaluated at each row of X. DELTA is 
+%   a D-by-D matrix or a scalar value, which MVCSN multiplies by the identity 
+%   matrix
 %
 %   If GAMMA=0, MVCSN becomes MVNPDF.
 %
 %   Example:
 %
-%     Mu = [0 0]; V = [0 0]; Sigma = [2 0; 0 2]; Delta = [3 0; 0 3]; Gamma = [-5 0; 0 -5]; 
+%     Mu = [0 0]; Sigma = [2 0; 0 2]; Gamma = [-5 0; 0 -5]; NU = [0 0]; Delta = [3 0; 0 3];  
 %     [X1,X2] = meshgrid(linspace(-5,1,100)', linspace(-5,1,100)');
 %     X = [X1(:) X2(:)];
-%     y = mvcsn(X, Mu, V, Sigma, Delta, Gamma);
+%     y = mvcsn(X, Mu, Sigma, Gamma, NU, Delta);
 %     surf(X1,X2,reshape(y,100,100));
 %   
 %   References:
@@ -59,91 +63,157 @@ if d<1
     error("TooFewDimensions");
 end
 
-% Assume zero mean, data are already centered
 if nargin < 2 || isempty(Mu)
-    X0 = X;  
-    V = zeros(1, d); 
+    X0 = X;
     Sigma = eye(d); 
+    Gamma = zeros(d); 
+    Nu = zeros(1, d);
     Delta = eye(d); 
-    Gamma = zeros(d); 
-% Get scalar mean, and use it to center data
 elseif nargin < 3
+    if isscalar(Mu)
+        Mu = Mu .* ones(1, d);
+    else
+        [~, d_Mu] = size(Mu);
+        if d~=d_Mu
+            error("BadMuDimension");
+        end
+    end
     X0 = X - Mu;
-    V = zeros(1, d); 
     Sigma = eye(d); 
-    Delta = eye(d);  
     Gamma = zeros(d); 
+    Nu = zeros(1, d); 
+    Delta = eye(d);  
 elseif nargin < 4
-    X0 = X - Mu;
-    [~, d_V] = size(V);
-    if d~=d_V
-        error("BadVDimension");
+    if isscalar(Mu)
+        Mu = Mu .* ones(1, d);
+    else
+        [~, d_Mu] = size(Mu);
+        if d~=d_Mu
+            error("BadMuDimension");
+        end
     end
-    Sigma = eye(d); 
-    Delta = eye(d);  
+    X0 = X - Mu;
+    if isscalar(Sigma)
+        Sigma = Sigma .* eye(d); 
+    else
+        [d1_Sigma, d2_Sigma] = size(Sigma);
+        if (d~=d1_Sigma)||(d~=d2_Sigma)
+            error("BadSigmaDimension");
+        end
+    end
     Gamma = zeros(d); 
+    Nu = zeros(1, d); 
+    Delta = eye(d);  
 elseif nargin < 5
-    X0 = X - Mu;
-    [~, d_V] = size(V);
-    if d~=d_V
-        error("BadVDimension");
+    if isscalar(Mu)
+        Mu = Mu .* ones(1, d);
+    else
+        [~, d_Mu] = size(Mu);
+        if d~=d_Mu
+            error("BadMuDimension");
+        end
     end
-    [d1_S, d2_S] = size(Sigma);
-    if d1_S~=d2_S
-        error("NotSquareSigma");
-    elseif d1_S~=d
-        error("BadSigmaDimension");
+    X0 = X - Mu;
+    if isscalar(Sigma)
+        Sigma = Sigma .* eye(d); 
+    else
+        [d1_Sigma, d2_Sigma] = size(Sigma);
+        if (d~=d1_Sigma)||(d~=d2_Sigma)
+            error("BadSigmaDimension");
+        end
+    end
+    if isscalar(Gamma)
+        Gamma = Gamma .* eye(d); 
+    else
+        [d1_Gamma, d2_Gamma] = size(Gamma);
+        if (d~=d1_Gamma)||(d~=d2_Gamma)
+            error("BadGammaDimension");
+        end
+    end
+    Nu = zeros(1, d); 
+    Delta = eye(d);  
+elseif nargin < 6
+    if isscalar(Mu)
+        Mu = Mu .* ones(1, d);
+    else
+        [~, d_Mu] = size(Mu);
+        if d~=d_Mu
+            error("BadMuDimension");
+        end
+    end
+    X0 = X - Mu;
+    if isscalar(Sigma)
+        Sigma = Sigma .* eye(d); 
+    else
+        [d1_Sigma, d2_Sigma] = size(Sigma);
+        if (d~=d1_Sigma)||(d~=d2_Sigma)
+            error("BadSigmaDimension");
+        end
+    end
+    if isscalar(Gamma)
+        Gamma = Gamma .* eye(d); 
+    else
+        [d1_Gamma, d2_Gamma] = size(Gamma);
+        if (d~=d1_Gamma)||(d~=d2_Gamma)
+            error("BadGammaDimension");
+        end
+    end
+    if isscalar(Nu)
+        Nu = Nu .* ones(1, d);
+    else
+        [~, d_Nu] = size(Nu);
+        if d~=d_Nu
+            error("BadNuDimension");
+        end
     end
     Delta = eye(d);  
-    Gamma = zeros(d); 
-elseif nargin < 6
-    X0 = X - Mu;
-    [~, d_V] = size(V);
-    if d~=d_V
-        error("BadVDimension");
-    end
-    [d1_S, d2_S] = size(Sigma);
-    if d1_S~=d2_S
-        error("NotSquareSigma");
-    elseif d1_S~=d
-        error("BadSigmaDimension");
-    end
-    [d1_D, d2_D] = size(Delta);
-    if d1_D~=d2_D
-        error("NotSquareDelta");
-    elseif d1_D~=d
-        error("BadDeltaDimension");
-    end
-    Gamma = zeros(d); 
 elseif nargin < 7
+    if isscalar(Mu)
+        Mu = Mu .* ones(1, d);
+    else
+        [~, d_Mu] = size(Mu);
+        if d~=d_Mu
+            error("BadMuDimension");
+        end
+    end
     X0 = X - Mu;
-    [~, d_V] = size(V);
-    if d~=d_V
-        error("BadVDimension");
+    if isscalar(Sigma)
+        Sigma = Sigma .* eye(d); 
+    else
+        [d1_Sigma, d2_Sigma] = size(Sigma);
+        if (d~=d1_Sigma)||(d~=d2_Sigma)
+            error("BadSigmaDimension");
+        end
     end
-    [d1_S, d2_S] = size(Sigma);
-    if d1_S~=d2_S
-        error("NotSquareSigma");
-    elseif d1_S~=d
-        error("BadSigmaDimension");
+    if isscalar(Gamma)
+        Gamma = Gamma .* eye(d); 
+    else
+        [d1_Gamma, d2_Gamma] = size(Gamma);
+        if (d~=d1_Gamma)||(d~=d2_Gamma)
+            error("BadGammaDimension");
+        end
     end
-    [d1_D, d2_D] = size(Delta);
-    if d1_D~=d2_D
-        error("NotSquareDelta");
-    elseif d1_D~=d
-        error("BadDeltaDimension");
+    if isscalar(Nu)
+        Nu = Nu .* ones(1, d);
+    else
+        [~, d_Nu] = size(Nu);
+        if d~=d_Nu
+            error("BadNuDimension");
+        end
     end
-    [d1_G, d2_G] = size(Gamma);
-    if d1_G~=d2_G
-        error("NotSquareGamma");
-    elseif d1_G~=d
-        error("BadGammaDimension");
+    if isscalar(Delta)
+        Delta = Delta .* eye(d); 
+    else
+        [d1_Delta, d2_Delta] = size(Delta);
+        if (d~=d1_Delta)||(d~=d2_Delta)
+            error("BadDeltaDimension");
+        end
     end
 else
-    error("BadInputs");
+    error("BadNumberOfInputs");
 end
 
-y = (mvncdf(zeros(size(X0)), V, Delta + Gamma * Sigma * Gamma')).^-1 ...
-    .* mvncdf(pagemtimes(Gamma,'none', X0, 'transpose')', V, Delta)...
+y = (mvncdf(zeros(size(X0)), Nu, Delta + Gamma * Sigma * Gamma')).^-1 ...
+    .* mvncdf(pagemtimes(Gamma,'none', X0, 'transpose')', Nu, Delta)...
     .* mvnpdf(X0, zeros(1,d), Sigma); 
 end
