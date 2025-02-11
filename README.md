@@ -5,7 +5,7 @@ $$
 \begin{gather}
     p(\boldsymbol{x})= \frac{\Phi(\Gamma(\boldsymbol{x}-\boldsymbol{\mu})|\boldsymbol{v}, \Delta)}{\Phi(\boldsymbol{0}|\boldsymbol{v}, \Delta + \Gamma\Sigma\Gamma^T)}\mathcal{N}(\boldsymbol{x}|\boldsymbol{\mu}, \Sigma),
     \\ 
-    \text{where} \quad \Phi(\boldsymbol{a}|\boldsymbol{b}, C) = \int_{-\infty}^{\boldsymbol{a}}\mathcal{N}(\boldsymbol{x}|\boldsymbol{b}, C)d\boldsymbol{x} \quad \text{and} \quad \mathcal{N}(\boldsymbol{x}|\boldsymbol{\mu}, \Sigma) = \frac{1}{\sqrt{(2\pi)^k|\Sigma|}}\exp\Bigg(-\frac{1}{2}(\boldsymbol{x}-\boldsymbol{\mu})^T\Sigma^{-1}(\boldsymbol{x}-\boldsymbol{\mu})\Bigg)
+    \text{where} \quad \Phi(\boldsymbol{a}|\boldsymbol{b}, C) = \int_{-\infty}^{\boldsymbol{a}}\mathcal{N}(\boldsymbol{a}'|\boldsymbol{b}, C)d\boldsymbol{a}' \quad \text{and} \quad \mathcal{N}(\boldsymbol{a}|\boldsymbol{b}, C) = \frac{1}{\sqrt{(2\pi)^k|C|}}\exp\Bigg(-\frac{1}{2}(\boldsymbol{a}-\boldsymbol{b})^T\Sigma^{-1}(\boldsymbol{a}-\boldsymbol{b})\Bigg)
 \end{gather}
 $$
 
