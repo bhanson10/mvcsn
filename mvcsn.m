@@ -2,22 +2,22 @@ function y = mvcsn(X, Mu, V, Sigma, Delta, Gamma)
 %MVCSN Multivariate Closed Skew Normal (CSN) Distribution 
 %   Y = MVCSN(X) returns the probability density of the multivariate
 %   closed skew normal distribution with zero mean, zero v, identity 
-%   covariance matrix, zero Delta, and zero Gamma, evaluated at each row of 
+%   covariance matrix, identity Delta, and zero Gamma, evaluated at each row of 
 %   X.  Rows of the N-by-D matrix X correspond to observations or points, 
 %   and columns correspond to variables or coordinates.  Y is an N-by-1 vector.
 %
 %   Y = MVCSN(X,MU) returns the density of the multivariate CSN with 
-%   centralization parameter MU, zero v, identity scale matrix, zero Delta,
+%   centralization parameter MU, zero v, identity scale matrix, identity Delta,
 %   and zero Gamma, evaluated at each row of X.  MU is a 1-by-D vector, a 
 %   scalar value, which MVCSN replicates to match the size of X.
 %
 %   Y = MVCSN(X,MU,V) returns the density of the multivariate CSN with 
-%   centralization parameter MU, V, identiy scale matrix, zero Delta, and
+%   centralization parameter MU, V, identiy scale matrix, identity Delta, and
 %   zero Gamma, evaluated at each row of X. V is a 1-by-D vector, or a 
 %   scalar value, which MVCSN replicates to match the size of X.
 %
 %   Y = MVCSN(X,MU,V,SIGMA) returns the density of the multivariate CSN with 
-%   centralization parameter MU, V, scale matrix SIGMA, zero Delta, and 
+%   centralization parameter MU, V, scale matrix SIGMA, identity Delta, and 
 %   zero Gamma, evaluated at each row of X.  SIGMA is a D-by-D matrix.
 %
 %   Y = MVCSN(X,MU,V,SIGMA,DELTA) returns the density of the multivariate CSN 
@@ -64,14 +64,14 @@ if nargin < 2 || isempty(Mu)
     X0 = X;  
     V = zeros(1, d); 
     Sigma = eye(d); 
-    Delta = zeros(d); 
+    Delta = eye(d); 
     Gamma = zeros(d); 
 % Get scalar mean, and use it to center data
 elseif nargin < 3
     X0 = X - Mu;
     V = zeros(1, d); 
     Sigma = eye(d); 
-    Delta = zeros(d); 
+    Delta = eye(d);  
     Gamma = zeros(d); 
 elseif nargin < 4
     X0 = X - Mu;
@@ -80,7 +80,7 @@ elseif nargin < 4
         error("BadVDimension");
     end
     Sigma = eye(d); 
-    Delta = zeros(d); 
+    Delta = eye(d);  
     Gamma = zeros(d); 
 elseif nargin < 5
     X0 = X - Mu;
@@ -94,7 +94,7 @@ elseif nargin < 5
     elseif d1_S~=d
         error("BadSigmaDimension");
     end
-    Delta = zeros(d); 
+    Delta = eye(d);  
     Gamma = zeros(d); 
 elseif nargin < 6
     X0 = X - Mu;
