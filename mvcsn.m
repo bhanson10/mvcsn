@@ -37,10 +37,10 @@ function y = mvcsn(X, Mu, Sigma, Gamma, Nu, Delta)
 %
 %   Example:
 %
-%     Mu = [0 0]; Sigma = [2 0; 0 2]; Gamma = [-5 0; 0 -5]; NU = [0 0]; Delta = [3 0; 0 3];  
+%     Mu = [0 0]; Sigma = [2 0; 0 2]; Gamma = [-5 0; 0 -5]; Nu = [0 0]; Delta = [3 0; 0 3];  
 %     [X1,X2] = meshgrid(linspace(-5,1,100)', linspace(-5,1,100)');
 %     X = [X1(:) X2(:)];
-%     y = mvcsn(X, Mu, Sigma, Gamma, NU, Delta);
+%     y = mvcsn(X, Mu, Sigma, Gamma, Nu, Delta);
 %     surf(X1,X2,reshape(y,100,100));
 %   
 %   References:
