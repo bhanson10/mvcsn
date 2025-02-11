@@ -8,7 +8,7 @@ function y = mvcsn(X, Mu, Sigma, Gamma, Nu, Delta)
 %
 %   Y = MVCSN(X,MU) returns the density of the multivariate CSN with 
 %   centralization parameter MU, identity scale matrix, zero Gamma, 
-%   zero Nu, and identity Delta, evaluated at each row of X. MU is a 1-by-D 
+%   zero Nu, and identity Delta, evaluated at each row of X. MU is a D-by-1 
 %   vector or a scalar value, which MVCSN replicates to match the size of X.
 %
 %   Y = MVCSN(X,MU,SIGMA) returns the density of the multivariate CSN with 
@@ -24,7 +24,7 @@ function y = mvcsn(X, Mu, Sigma, Gamma, Nu, Delta)
 %
 %   Y = MVCSN(X,MU,SIGMA,GAMMA,NU) returns the density of the multivariate CSN 
 %   with centralization parameter MU, scale matrix SIGMA, skew matrix GAMMA,
-%   NU, and zero Gamma, evaluated at each row of X. NU is a 1-by-D vector or 
+%   NU, and zero Gamma, evaluated at each row of X. NU is a D-by-1 vector or 
 %   a scalar value, which MVCSN replicates to match the size of X.
 %
 %   Y = MVCSN(X,MU,SIGMA,GAMMA,NU,DELTA) returns the density of the 
@@ -37,7 +37,7 @@ function y = mvcsn(X, Mu, Sigma, Gamma, Nu, Delta)
 %
 %   Example:
 %
-%     Mu = [0 0]; Sigma = [2 0; 0 2]; Gamma = [-5 0; 0 -5]; Nu = [0 0]; Delta = [3 0; 0 3];  
+%     Mu = [0; 0]; Sigma = [2 0; 0 2]; Gamma = [-5 0; 0 -5]; Nu = [0; 0]; Delta = [3 0; 0 3];  
 %     [X1,X2] = meshgrid(linspace(-5,1,100)', linspace(-5,1,100)');
 %     X = [X1(:) X2(:)];
 %     y = mvcsn(X, Mu, Sigma, Gamma, Nu, Delta);
@@ -73,9 +73,11 @@ elseif nargin < 3
     if isscalar(Mu)
         Mu = Mu .* ones(1, d);
     else
-        [~, d_Mu] = size(Mu);
+        [d_Mu, ~] = size(Mu);
         if d~=d_Mu
             error("BadMuDimension");
+        else
+            Mu = Mu';
         end
     end
     X0 = X - Mu;
@@ -87,9 +89,11 @@ elseif nargin < 4
     if isscalar(Mu)
         Mu = Mu .* ones(1, d);
     else
-        [~, d_Mu] = size(Mu);
+        [d_Mu, ~] = size(Mu);
         if d~=d_Mu
             error("BadMuDimension");
+        else
+            Mu = Mu';
         end
     end
     X0 = X - Mu;
@@ -108,9 +112,11 @@ elseif nargin < 5
     if isscalar(Mu)
         Mu = Mu .* ones(1, d);
     else
-        [~, d_Mu] = size(Mu);
+        [d_Mu, ~] = size(Mu);
         if d~=d_Mu
             error("BadMuDimension");
+        else
+            Mu = Mu';
         end
     end
     X0 = X - Mu;
@@ -136,9 +142,11 @@ elseif nargin < 6
     if isscalar(Mu)
         Mu = Mu .* ones(1, d);
     else
-        [~, d_Mu] = size(Mu);
+        [d_Mu, ~] = size(Mu);
         if d~=d_Mu
             error("BadMuDimension");
+        else
+            Mu = Mu';
         end
     end
     X0 = X - Mu;
@@ -161,9 +169,11 @@ elseif nargin < 6
     if isscalar(Nu)
         Nu = Nu .* ones(1, d);
     else
-        [~, d_Nu] = size(Nu);
+        [d_Nu, ~] = size(Nu);
         if d~=d_Nu
             error("BadNuDimension");
+        else
+            Nu = Nu';
         end
     end
     Delta = eye(d);  
@@ -171,9 +181,11 @@ elseif nargin < 7
     if isscalar(Mu)
         Mu = Mu .* ones(1, d);
     else
-        [~, d_Mu] = size(Mu);
+        [d_Mu, ~] = size(Mu);
         if d~=d_Mu
             error("BadMuDimension");
+        else
+            Mu = Mu';
         end
     end
     X0 = X - Mu;
@@ -196,9 +208,11 @@ elseif nargin < 7
     if isscalar(Nu)
         Nu = Nu .* ones(1, d);
     else
-        [~, d_Nu] = size(Nu);
+        [d_Nu, ~] = size(Nu);
         if d~=d_Nu
             error("BadNuDimension");
+        else
+            Nu = Nu';
         end
     end
     if isscalar(Delta)
